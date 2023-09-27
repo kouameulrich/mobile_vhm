@@ -1,27 +1,24 @@
 
 import 'dart:convert';
 
-import 'package:appfres/_api/tokenStorageService.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_whm_2/_api/tokenStorageService.dart';
 
 class AuthService{
   final TokenStorageService _tokenStorageService;
   Dio dio=Dio();
 
   AuthService(this._tokenStorageService);
-  Future<int?> authenticateUser(String tenantID, String username, String password) async {
-    _tokenStorageService.saveTenantId(tenantID);
+  Future<int?> authenticateUser(String username, String password) async {
+    _tokenStorageService.saveAgentUsername(username);
 
-    String url = 'https://localhost:8080/auth/realms/$tenantID/protocol/openid-connect/token';
+    String url = 'https://localhost:8080/auth/realms/protocol/openid-connect/token';
      final Response response= await dio.post(url,
           data:{
             "username": username,
             "password": password,
-            "client_id": "fresapp-client",
-            "grant_type": "password",
-            "scope": "email openid profile"
           },
         options: Options(contentType: Headers.formUrlEncodedContentType,
                           responseType: ResponseType.json)

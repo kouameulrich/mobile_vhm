@@ -2,28 +2,37 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_whm_2/models/guestPost.dart';
+import 'package:flutter/foundation.dart';
+import 'package:mobile_whm_2/models/guestPost2.dart';
 
 class SendData {
+  ///////// ----------- SYNCHRONISATION MEMBERS-------------
   static Future postPresence() async {
     // Create storage
-    final storage = new FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
 
     //Read data storage guest
     final readDataStore = await storage.read(key: 'presenceIdStorage');
     final List presenceIdStorage = jsonDecode(readDataStore!);
-    print(presenceIdStorage.length);
-    print(presenceIdStorage);
+    if (kDebugMode) {
+      print(presenceIdStorage.length);
+    }
+    if (kDebugMode) {
+      print(presenceIdStorage);
+    }
     /*final List<GuestPost> dataToList =
         newPersonStorage.map((json) => GuestPost.fromJson(json)).toList();*/
 
     for (int i = 0; i <= presenceIdStorage.length - 1; i++) {
       var eventMemberJoinDate = DateTime.now().toString();
       var churchId = 1;
-      print(
-          'print for: ${presenceIdStorage[i]} - ${eventMemberJoinDate} - ${churchId}');
+      if (kDebugMode) {
+        print(
+            'print for: ${presenceIdStorage[i]} - $eventMemberJoinDate - $churchId');
+      }
 
-      var url =
-          Uri.parse('https://backendvhm.azurewebsites.net/api/EventMember/add');
+      var url = Uri.parse(
+          'https://backendvhm.azurewebsites.net/api/EventMember/mobileAdd');
 
       final response = await http.post(
         url,
@@ -31,28 +40,100 @@ class SendData {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode({
-          "eventMemberJoinDate": eventMemberJoinDate,
+          "eventMemberJoinDate": null,
+          "eventMemberJoinDay": null,
+          "eventMemberJoinMonth": null,
+          "eventMemberJoinYear": null,
           "eventId": null,
           "memberId": presenceIdStorage[i],
           "churchId": churchId
         }),
       );
-      var sendResponse;
+      String? sendResponse;
       if (response.statusCode == 200) {
         sendResponse = response.body;
-        print('response.statusCode == ${response.statusCode}');
+        if (kDebugMode) {
+          print('response.statusCode == ${response.statusCode}');
+        }
       } else {
         sendResponse = null;
-        print('response.statusCode ==  ${response.statusCode}');
-        print('response.statusCode ==  ${response.body}');
+        if (kDebugMode) {
+          print('response.statusCode ==  ${response.statusCode}');
+        }
+        if (kDebugMode) {
+          print('response.statusCode ==  ${response.body}');
+        }
       }
-      print(sendResponse);
+      if (kDebugMode) {
+        print(sendResponse);
+      }
     }
   }
 
+  static Future postPresenceLeaman() async {
+    // Create storage
+    const storage = FlutterSecureStorage();
+
+    //Read data storage guest
+    final readDataStore = await storage.read(key: 'presenceIdStorage');
+    final List presenceIdStorage = jsonDecode(readDataStore!);
+    if (kDebugMode) {
+      print(presenceIdStorage.length);
+    }
+    if (kDebugMode) {
+      print(presenceIdStorage);
+    }
+    /*final List<GuestPost> dataToList =
+        newPersonStorage.map((json) => GuestPost.fromJson(json)).toList();*/
+
+    for (int i = 0; i <= presenceIdStorage.length - 1; i++) {
+      var eventMemberJoinDate = DateTime.now().toString();
+      var churchId = 1;
+      if (kDebugMode) {
+        print(
+            'print for: ${presenceIdStorage[i]} - $eventMemberJoinDate - $churchId');
+      }
+
+      var url = Uri.parse(
+          'https://backendvhm.azurewebsites.net/api/EventMember/mobileAdd');
+
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          "leamanJoinDate": null,
+          "leamanJoinDay": null,
+          "leamanJoinMonth": null,
+          "leamanJoinYear": null,
+        }),
+      );
+      String? sendResponse;
+      if (response.statusCode == 200) {
+        sendResponse = response.body;
+        if (kDebugMode) {
+          print('response.statusCode == ${response.statusCode}');
+        }
+      } else {
+        sendResponse = null;
+        if (kDebugMode) {
+          print('response.statusCode ==  ${response.statusCode}');
+        }
+        if (kDebugMode) {
+          print('response.statusCode ==  ${response.body}');
+        }
+      }
+      if (kDebugMode) {
+        print(sendResponse);
+      }
+    }
+  }
+
+///////// ----------- SYNCHRONISATION NEW MEMBERS-------------
   static Future postGuest() async {
-    var sendResponse;
-    var responseAlert;
+    String sendResponse;
+    String responseAlert;
     // Create storage
     final storage = new FlutterSecureStorage();
 
@@ -61,11 +142,15 @@ class SendData {
 
     if (readDataStore != null) {
       final List newPersonStorage = jsonDecode(readDataStore);
-      print(newPersonStorage.length);
+      if (kDebugMode) {
+        print(newPersonStorage.length);
+      }
 
       final List<GuestPost> dataToList =
           newPersonStorage.map((json) => GuestPost.fromJson(json)).toList();
-      print('List<GuestPost> dataToList: ${dataToList[0].memberLastName}');
+      if (kDebugMode) {
+        print('List<GuestPost> dataToList: ${dataToList[0].memberLastName}');
+      }
 
       for (int i = 0; i <= dataToList.length - 1; i++) {
         var url =
@@ -87,9 +172,38 @@ class SendData {
           }),
         );
 
+        if (kDebugMode) {
+          print(response.statusCode);
+        }
+
         if (response.statusCode == 200) {
           sendResponse = response.body;
-          if (sendResponse != '') {
+          if (sendResponse != "") {
+            // Add EventGuest
+            var url = Uri.parse(
+                'https://backendvhm.azurewebsites.net/api/EventGuest/AddEventGuestByMobile');
+            final responseEventGuest = await http.post(
+              url,
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode({
+                "eventGuestJoinDate": null,
+                "eventGuestJoinDay": null,
+                "eventGuestJoinMonth": null,
+                "eventGuestJoinYear": null,
+                "eventId": null,
+                "memberId": sendResponse,
+                "churchId": dataToList[i].churchId
+              }),
+            );
+
+            if (kDebugMode) {
+              print(responseEventGuest.statusCode);
+              print(responseEventGuest.body);
+            }
+
+            // storage memberId in local
             List dataId = [];
             final readAttendanceIdData =
                 await storage.read(key: 'presenceIdStorage');
@@ -99,8 +213,12 @@ class SendData {
               final dataIdEncoded = json.encode(dataId);
               await storage.write(
                   key: 'presenceIdStorage', value: dataIdEncoded);
-              print('dataId.length == ${dataId.length}');
-              print('dataId == ${dataId}');
+              if (kDebugMode) {
+                print('dataId.length == ${dataId.length}');
+              }
+              if (kDebugMode) {
+                print('dataId == $dataId');
+              }
             } else {
               final List decodeIdData = jsonDecode(readAttendanceIdData);
               decodeIdData.add(sendResponse);
@@ -108,18 +226,100 @@ class SendData {
               final dataIdEncoded = json.encode(decodeIdData);
               await storage.write(
                   key: 'presenceIdStorage', value: dataIdEncoded);
-              print('presenceIdStore.length == ${decodeIdData.length}');
-              print('presenceIdStore == ${decodeIdData}');
+              if (kDebugMode) {
+                print('presenceIdStore.length == ${decodeIdData.length}');
+              }
+              if (kDebugMode) {
+                print('presenceIdStore == $decodeIdData');
+              }
             }
           }
-          print('response.statusCode == ${response.statusCode}');
+          if (kDebugMode) {
+            print('response.statusCode == ${response.statusCode}');
+          }
         } else {
           responseAlert = 'error';
-          print('response.statusCode ==  ${response.statusCode}');
-          print('response.statusCode ==  ${response.body}');
+          if (kDebugMode) {
+            print('response.statusCode ==  ${response.statusCode}');
+          }
+          if (kDebugMode) {
+            print('response.statusCode ==  ${response.body}');
+          }
           return responseAlert;
         }
-        print(sendResponse);
+        if (kDebugMode) {
+          print(sendResponse);
+        }
+      }
+      //return sendResponse;
+    }
+    responseAlert = 'success';
+    return responseAlert;
+  }
+
+// LEAMAN SEND DATA
+  static Future postGuestLeaman() async {
+    String sendResponse;
+    String responseAlert;
+    // Create storage
+    final storage = new FlutterSecureStorage();
+
+    //Read data storage guest
+    final readDataStore = await storage.read(key: 'mewPersonStorage');
+
+    if (readDataStore != null) {
+      final List newPersonStorage = jsonDecode(readDataStore);
+      if (kDebugMode) {
+        print(newPersonStorage.length);
+      }
+
+      final List<GuestPost2> dataToList =
+          newPersonStorage.map((json) => GuestPost2.fromJson(json)).toList();
+      if (kDebugMode) {
+        print('List<GuestPost2> dataToList: ${dataToList[0].leamanLastName}');
+      }
+
+      for (int i = 0; i <= dataToList.length - 1; i++) {
+        // print(dataToList[i].leamanFirstName);
+        var url =
+            Uri.parse('https://backendvhm.azurewebsites.net/api/Leaman/add');
+        final response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({
+            "leamanLastName": dataToList[i].leamanLastName,
+            "leamanFirstName": dataToList[i].leamanFirstName,
+            "leamanPhone": dataToList[i].leamanPhone,
+            "leamanDateOfEntry": dataToList[i].leamanDateOfEntry,
+            "leamanInvited": dataToList[i].leamanInvited,
+            "leamanGender": dataToList[i].leamanGender,
+            "leamanChurch": dataToList[i].leamanChurch,
+            "leamanChurchInfo": dataToList[i].leamanChurchInfo
+          }),
+        );
+
+        if (kDebugMode) {
+          print(response.statusCode);
+        }
+
+        if (response.statusCode == 200) {
+          sendResponse = response.body;
+          print(sendResponse);
+        } else {
+          responseAlert = 'error';
+          if (kDebugMode) {
+            print('response.statusCode ==  ${response.statusCode}');
+          }
+          if (kDebugMode) {
+            print('response.statusCode ==  ${response.body}');
+          }
+          return responseAlert;
+        }
+        if (kDebugMode) {
+          print(sendResponse);
+        }
       }
       //return sendResponse;
     }

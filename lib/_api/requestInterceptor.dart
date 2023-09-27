@@ -2,10 +2,10 @@
 
 import 'dart:developer';
 
-import 'package:appfres/_api/tokenStorageService.dart';
-import 'package:appfres/di/service_locator.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_whm_2/_api/tokenStorageService.dart';
+import 'package:mobile_whm_2/di/service_locator.dart';
 
 
 class RequestInterceptor extends Interceptor{

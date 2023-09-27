@@ -1,8 +1,8 @@
 
 import 'dart:convert';
 
-import 'package:appfres/models/agent.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mobile_whm_2/models/agent.dart';
 import '../models/tokenModel.dart';
 
 
@@ -12,7 +12,6 @@ class TokenStorageService{
    static const String TOKEN_KEY = "TOKEN";
    static const String TENANT_KEY = "TENANT_ID";
    static const String USER_KEY = "USER";
-   static const String MAT_KEY = "MAT";
    static const String USERNAME_KEY = "USERNAME";
    static const String NOM_KEY = "NOM";
    static const String PRENOM_KEY = "PRENOM";
@@ -27,14 +26,11 @@ class TokenStorageService{
    }
 
    void saveAgentConnected(Agent agent) async {
-     await _storage.write(key: MAT_KEY, value: agent.matricule);
      await _storage.write(key: USERNAME_KEY, value: agent.nomUtilisateur);
      await _storage.write(key: NOM_KEY, value: agent.nom);
      await _storage.write(key: PRENOM_KEY, value: agent.prenom);
    }
-   void saveAgentMatricule(String matricule) async {
-     await _storage.write(key: MAT_KEY, value: matricule);
-   }
+
    void saveAgentUsername(String username) async {
      await _storage.write(key: USERNAME_KEY, value: username);
    }
@@ -45,11 +41,10 @@ class TokenStorageService{
      await _storage.write(key: PRENOM_KEY, value: prenom);
    }
    Future<Agent?> retrieveAgentConnected() async {
-     String? matricule = await _storage.read(key: MAT_KEY);
      String? username = await _storage.read(key: USERNAME_KEY);
      String? nom = await _storage.read(key: NOM_KEY);
      String? prenom = await _storage.read(key: PRENOM_KEY);
-     Agent agentConnected = Agent(matricule: matricule,nomUtilisateur: username,nom: nom,prenom: prenom);
+     Agent agentConnected = Agent(nomUtilisateur: username,nom: nom,prenom: prenom);
      return agentConnected;
    }
 

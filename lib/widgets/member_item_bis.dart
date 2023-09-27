@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../models/member.dart';
-import '../models/memberBis.dart';
+import 'package:mobile_whm_2/models/memberBis.dart';
+import 'package:mobile_whm_2/widgets/default.colors.dart';
 
 class MemberItemBis extends StatelessWidget {
   MemberItemBis({Key? key, required this.item, this.onTap}) : super(key: key);
@@ -12,16 +11,28 @@ class MemberItemBis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        radius: 50.0,
-        backgroundImage: AssetImage('images/avatar_image.jpg'),
+      leading: const CircleAvatar(
+        child: Icon(
+          Icons.person,
+          color: Colors.white,
+        ),
       ),
-      title: Text(item.memberFullName),
-      subtitle: Text(item.memberPhone),
+      title: Text(
+        item.memberFullName,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Defaults.bluePrincipal,
+        ),
+      ),
+      subtitle: Text(
+        item.memberPhone,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Defaults.bluePrincipal,
+        ),
+      ),
       trailing: ElevatedButton(
-        child: Text('Valider'),
-        onPressed: !item.flag ? onTap : null,
-      ),
+          onPressed: !item.flag ? onTap : null, child: Text('Valider')),
     );
   }
 }

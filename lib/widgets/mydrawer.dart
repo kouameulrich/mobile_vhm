@@ -1,13 +1,13 @@
-import 'package:appfres/_api/tokenStorageService.dart';
-import 'package:appfres/di/service_locator.dart';
-import 'package:appfres/models/agent.dart';
-import 'package:appfres/ui/pages/login.page.dart';
-import 'package:appfres/widgets/default.colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_whm_2/_api/tokenStorageService.dart';
+import 'package:mobile_whm_2/di/service_locator.dart';
+import 'package:mobile_whm_2/models/agent.dart';
+import 'package:mobile_whm_2/screens/login.page.dart';
+import 'package:mobile_whm_2/widgets/default.colors.dart';
 
 class MyDrawer extends StatefulWidget {
-  MyDrawer({super.key});
+  const MyDrawer({Key? key}) : super(key: key);
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -16,18 +16,18 @@ class MyDrawer extends StatefulWidget {
 var indexClicked = 0;
 
 class _MyDrawerState extends State<MyDrawer> {
-  final storage = locator<TokenStorageService>();
-  late final Future<Agent?> _futureAgentConnected;
+  // final storage = locator<TokenStorageService>();
+  // late final Future<Agent?> _futureAgentConnected;
 
   @override
   void initState() {
-    _futureAgentConnected = getAgent();
+    // _futureAgentConnected = getAgent();
     super.initState();
   }
 
-  Future<Agent?> getAgent() async {
-    return await storage.retrieveAgentConnected();
-  }
+  // Future<Agent?> getAgent() async {
+  //   return await storage.retrieveAgentConnected();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,32 +50,34 @@ class _MyDrawerState extends State<MyDrawer> {
                       height: 20,
                     ),
                     FutureBuilder<Agent?>(
-                        future: _futureAgentConnected,
-                        builder: (context, snapshot) {
-                          return Column(
-                            children: [
-                              Text(
-                                snapshot.hasData
-                                    ? '${snapshot.data!.prenom} ${snapshot.data!.nom}'
-                                    : '',
-                                style: GoogleFonts.sanchez(
-                                  fontSize: 25,
+                      //future: _futureAgentConnected,
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Text(
+                              snapshot.hasData
+                                  ? '${snapshot.data!.prenom} ${snapshot.data!.nom}'
+                                  : '',
+                              style: GoogleFonts.sanchez(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w500,
+                                color: Defaults.libelleColor,
+                              ),
+                            ),
+                            Text(
+                              snapshot.hasData
+                                  ? '${snapshot.data!.nomUtilisateur}'
+                                  : '',
+                              style: GoogleFonts.sanchez(
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w500,
-                                  color: Defaults.libelleColor,
-                                ),
-                              ),
-                              Text(
-                                snapshot.hasData
-                                    ? '${snapshot.data!.matricule}'
-                                    : '',
-                                style: GoogleFonts.sanchez(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          );
-                        })
+                                  color: Colors.white),
+                            ),
+                          ],
+                        );
+                      },
+                      future: null,
+                    )
                   ],
                 ),
               )),
@@ -89,12 +91,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 AppDrawerTile(
                   index: 1,
-                  route: '/listerecensement',
+                  route: '/attendanceBisBis',
                 ),
-                AppDrawerTile(
-                  index: 2,
-                  route: '/transfert',
-                ),
+                // AppDrawerTile(
+                //   index: 2,
+                //   route: '/transfert',
+                // ),
               ],
             ),
           ),
@@ -104,32 +106,38 @@ class _MyDrawerState extends State<MyDrawer> {
             indent: 20,
             endIndent: 20,
           ),
-
           Padding(
             padding: const EdgeInsets.only(
                 left: 0.0, right: 110.0, top: 30, bottom: 160),
-            child: TextButton.icon(     // <-- TextButton
+            child: TextButton.icon(
+              // <-- TextButton
               onPressed: () {
-                storage.deleteAllToken();
-                indexClicked = 0;
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => LoginPage()));
+                //storage.deleteAllToken();
+                // indexClicked = 0;
+                // Navigator.of(context).pop();
+                // Navigator.push(
+                //     context, MaterialPageRoute(builder: (_) => LoginPage()));
               },
               icon: Icon(
                 Icons.power_settings_new_sharp,
                 size: 30.0,
               ),
-              label: Text('Déconnexion', style: TextStyle(fontSize: 18,),),
+              label: Text(
+                'Déconnexion',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(
                 left: 20.0, right: 20.0, top: 40, bottom: 50),
             child: Image.asset(
-              'images/img.png',
+              'images/logo_vhm_blanc.png',
               height: 100,
               width: 75,
+              color: Color.fromRGBO(2, 108, 104, 1),
             ),
           )
         ],

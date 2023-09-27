@@ -1,9 +1,8 @@
 
-
-import 'package:appfres/_api/dioException.dart';
-import 'package:appfres/widgets/navigator_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_whm_2/_api/dioException.dart';
+import 'package:mobile_whm_2/widgets/navigator_key.dart';
 
 class ErrorDialog {
   static final ErrorDialog _singleton = ErrorDialog._internal();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_whm_2/screens/attendanceBis.dart';
-import 'package:mobile_whm_2/screens/attendanceBisBis.dart';
+import 'package:mobile_whm_2/screens/Members/attendanceBisBis.dart';
+import 'package:mobile_whm_2/screens/home.page.dart';
+import 'package:mobile_whm_2/screens/login.page.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'screens/attendance.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +18,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: title,
         theme: ThemeData(primarySwatch: Colors.teal),
-        home: MainPage(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => MainPage(),
+          '/loginpage': (context) => LoginPage(),
+          '/home': (context) => HomePage(),
+          '/attendanceBisBis': (context) => AttendanceBisBis(),
+        },
       ),
     );
   }
@@ -42,7 +48,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //bottomNavigationBar: buildBottomBar(),
-      body: attendanceBisBis(),
+      body: HomePage(),
     );
   }
 }
